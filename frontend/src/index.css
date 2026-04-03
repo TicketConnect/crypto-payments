@@ -1,0 +1,64 @@
+:root {
+  --bg: #050506;
+  --card: #0a0a0c;
+  --surface: #101012;
+  --surface-hover: #161618;
+  --ring: rgba(255, 255, 255, 0.04);
+  --ring-hover: rgba(255, 255, 255, 0.07);
+  --ring-active: rgba(255, 255, 255, 0.1);
+  --text-primary: #fafafa;
+  --text-secondary: #71717a;
+  --text-muted: #3f3f46;
+  --accent: #2775CA;
+  --success: #22c55e;
+  --danger: #dc2626;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'SF Mono', monospace;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Grain texture for atmosphere */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: overlay;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+/* Utility */
+button {
+  font-family: var(--font);
+}

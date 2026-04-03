@@ -1,0 +1,16 @@
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/lib/
+
+# Rust
+backend/target/
+*.db
+.env
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# OS
+.DS_Store
