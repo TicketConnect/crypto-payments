@@ -12,15 +12,14 @@ export type Chain = {
   shortLabel?: string   // 1-2 char fallback for logo (default: name[0])
   cctpDomain?: number
   comingSoon?: boolean
-  usdcAddress?: string
 }
 
 export const SUPPORTED_CHAINS: Chain[] = [
-  { id: 1,     name: 'Ethereum',  color: '#627EEA', logo: 'ethereum',        cctpDomain: 0, usdcAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' },
-  { id: 42161, name: 'Arbitrum',  color: '#12AAFF', logo: 'arbitrum',        logoBg: '#05163D', cctpDomain: 3, usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' },
-  { id: 8453,  name: 'Base',      color: '#0052FF', logo: 'base',            logoBg: '#ffffff', cctpDomain: 6, usdcAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' },
-  { id: 10,    name: 'Optimism',  color: '#FF0420', logo: 'op-mainnet',      logoScale: 0.6, cctpDomain: 2, usdcAddress: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85' },
-  { id: 137,   name: 'Polygon',   color: '#8247E5', logo: 'polygon',        logoBg: '#6C00F7', logoScale: 1.1, usdcAddress: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359' },
+  { id: 1,     name: 'Ethereum',  color: '#627EEA', logo: 'ethereum',        cctpDomain: 0 },
+  { id: 42161, name: 'Arbitrum',  color: '#12AAFF', logo: 'arbitrum',        logoBg: '#05163D', cctpDomain: 3 },
+  { id: 8453,  name: 'Base',      color: '#0052FF', logo: 'base',            logoBg: '#ffffff', cctpDomain: 6 },
+  { id: 10,    name: 'Optimism',  color: '#FF0420', logo: 'op-mainnet',      logoScale: 0.6, cctpDomain: 2 },
+  { id: 137,   name: 'Polygon',   color: '#8247E5', logo: 'polygon',        logoBg: '#6C00F7', logoScale: 1.1 },
   { id: 56,    name: 'BSC',       color: '#F0B90B', logo: 'bnb-smart-chain', logoBg: '#1E2026' },
   { id: 10143, name: 'Monad',     color: '#836EF9', logo: 'monad',          logoBg: '#6E54FF', logoScale: 0.85 },
   { id: 999,   name: 'HyperEVM',  color: '#7BF179', logo: 'hyperevm',       logoBg: '#072722', shortLabel: 'HL' },

@@ -217,11 +217,7 @@ function App() {
         ) : view === 'assets' ? (
           <SupportedAssets initialChainId={assetsChainId} />
         ) : (
-          <DepositMethods
-            onSelectCrypto={() => setView('crypto')}
-            destinationChainId={activeWallet.destinationChainId}
-            destinationAddress={activeWallet.destinationAddress || undefined}
-          />
+          <DepositMethods onSelectCrypto={() => setView('crypto')} />
         )}
       </div>
     </div>
