@@ -1,0 +1,166 @@
+.deposit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.deposit-form-back {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.deposit-form-back:hover {
+  color: var(--text-primary);
+}
+
+.deposit-form-token {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.deposit-form-token-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+
+.deposit-form-token-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-hover);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.deposit-form-token-symbol {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.deposit-form-token-chain {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.deposit-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deposit-form-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.deposit-form-input-wrap {
+  display: flex;
+  gap: 8px;
+}
+
+.deposit-form-input {
+  flex: 1;
+  height: 48px;
+  padding: 0 16px;
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 1px var(--ring);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  outline: none;
+  transition: box-shadow 0.15s;
+}
+
+.deposit-form-input:focus {
+  box-shadow: inset 0 0 0 1px var(--ring-active);
+}
+
+.deposit-form-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Hide number input spinners */
+.deposit-form-input::-webkit-outer-spin-button,
+.deposit-form-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.deposit-form-input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.deposit-form-max {
+  height: 48px;
+  padding: 0 16px;
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 1px var(--ring);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.deposit-form-max:hover {
+  background: var(--surface-hover);
+}
+
+.deposit-form-hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.deposit-form-chains {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Reuses .chain-pill and .chain-pill.active from Settings.css */
+
+.deposit-form-submit {
+  height: 48px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.deposit-form-submit:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+.deposit-form-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

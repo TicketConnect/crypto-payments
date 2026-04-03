@@ -32,6 +32,38 @@ export function useSession(
   const [session, setSession] = useState<Session | null>(null)
   const [error, setError] = useState<string | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const eventSourceRef = useRef<EventSource | null>(null)
+
+  // Clean up SSE connection
+  const closeSSE = useCallback(() => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close()
+      eventSourceRef.current = null
+    }
+  }, [])
+
+  // Open SSE connection for a session
+  const connectSSE = useCallback((sessionId: string) => {
+    closeSSE()
+
+    const es = new EventSource(`${API_URL}/sessions/${sessionId}/events`)
+    eventSourceRef.current = es
+
+    es.addEventListener('status', (event) => {
+      try {
+        const data = JSON.parse(event.data)
+        const status = data.status as SessionStatus
+        setSession(prev => prev ? { ...prev, status } : prev)
+      } catch {
+        // ignore parse errors
+      }
+    })
+
+    es.onerror = () => {
+      // SSE failed — close and fall back to expiry-based renewal
+      closeSSE()
+    }
+  }, [closeSSE])
 
   const register = useCallback(async () => {
     if (!burnerAddress || !signedAuth || !destinationAddress) return
@@ -65,11 +97,14 @@ export function useSession(
         expiresAt: data.expires_at,
         status: data.status as SessionStatus,
       })
+
+      // Connect SSE for real-time status updates
+      connectSSE(data.id)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Unknown error')
       setSession(null)
     }
-  }, [burnerAddress, signedAuth, destinationAddress, destinationChainId])
+  }, [burnerAddress, signedAuth, destinationAddress, destinationChainId, connectSSE])
 
   // Auto-register when destination is configured
   useEffect(() => {
@@ -86,18 +121,34 @@ export function useSession(
     const msUntilExpiry = session.expiresAt * 1000 - Date.now()
     if (msUntilExpiry <= 0) {
       // Already expired, renew now
+      closeSSE()
       setSession(null) // triggers re-register via the effect above
       return
     }
 
     timerRef.current = setTimeout(() => {
+      closeSSE()
       setSession(null) // triggers re-register
     }, msUntilExpiry)
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [session])
+  }, [session, closeSSE])
+
+  // Close SSE on terminal states
+  useEffect(() => {
+    if (session?.status === 'swept' || session?.status === 'failed') {
+      closeSSE()
+    }
+  }, [session?.status, closeSSE])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      closeSSE()
+    }
+  }, [closeSSE])
 
   return { session, error, register }
 }

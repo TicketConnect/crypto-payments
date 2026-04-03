@@ -12,18 +12,37 @@ export type Chain = {
   shortLabel?: string   // 1-2 char fallback for logo (default: name[0])
   cctpDomain?: number
   comingSoon?: boolean
+  usdcAddress?: string
 }
 
 export const SUPPORTED_CHAINS: Chain[] = [
-  { id: 1,     name: 'Ethereum',  color: '#627EEA', logo: 'ethereum',        cctpDomain: 0 },
-  { id: 42161, name: 'Arbitrum',  color: '#12AAFF', logo: 'arbitrum',        logoBg: '#05163D', cctpDomain: 3 },
-  { id: 8453,  name: 'Base',      color: '#0052FF', logo: 'base',            logoBg: '#ffffff', cctpDomain: 6 },
-  { id: 10,    name: 'Optimism',  color: '#FF0420', logo: 'op-mainnet',      logoScale: 0.6, cctpDomain: 2 },
-  { id: 137,   name: 'Polygon',   color: '#8247E5', logo: 'polygon',        logoBg: '#6C00F7', logoScale: 1.1 },
+  { id: 1,     name: 'Ethereum',  color: '#627EEA', logo: 'ethereum',        cctpDomain: 0, usdcAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' },
+  { id: 42161, name: 'Arbitrum',  color: '#12AAFF', logo: 'arbitrum',        logoBg: '#05163D', cctpDomain: 3, usdcAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831' },
+  { id: 8453,  name: 'Base',      color: '#0052FF', logo: 'base',            logoBg: '#ffffff', cctpDomain: 6, usdcAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' },
+  { id: 10,    name: 'Optimism',  color: '#FF0420', logo: 'op-mainnet',      logoScale: 0.6, cctpDomain: 2, usdcAddress: '0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85' },
+  { id: 137,   name: 'Polygon',   color: '#8247E5', logo: 'polygon',        logoBg: '#6C00F7', logoScale: 1.1, usdcAddress: '0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359' },
   { id: 56,    name: 'BSC',       color: '#F0B90B', logo: 'bnb-smart-chain', logoBg: '#1E2026' },
-  { id: 10143, name: 'Monad',     color: '#836EF9', logo: 'monad',          logoBg: '#6E54FF', logoScale: 0.85 },
+  { id: 143,   name: 'Monad',     color: '#836EF9', logo: 'monad',          logoBg: '#6E54FF', logoScale: 0.85 },
   { id: 999,   name: 'HyperEVM',  color: '#7BF179', logo: 'hyperevm',       logoBg: '#072722', shortLabel: 'HL' },
   { id: 0,     name: 'Solana',    color: '#9945FF', logo: 'solana',          logoBg: 'linear-gradient(to right, #9945FF, #14F195)' },
+]
+
+export type PeerMethod = {
+  name: string
+  logo: string       // filename in /peer-logos/ (with extension)
+  color: string      // brand color (used as background)
+  logoScale?: number // 0-1+ scale (default 0.75)
+}
+
+export const PEER_METHODS: PeerMethod[] = [
+  { name: 'Luxon',   logo: 'luxon.png',   color: '#000000', logoScale: 1 },
+  { name: 'Revolut', logo: 'revolut.svg', color: '#ffffff' },
+  { name: 'Wise',    logo: 'wise.svg', color: '#9FE870', logoScale: 1 },
+  { name: 'Venmo',   logo: 'venmo.webp',         color: '#008CFF', logoScale: 1 },
+  { name: 'CashApp', logo: 'cashapp.svg', color: '#00D632', logoScale: 0.9 },
+  { name: 'Chime',   logo: 'chime.webp',   color: '#1DBF73', logoScale: 1 },
+  { name: 'Zelle',   logo: 'zelle.svg',   color: '#6D1ED4', logoScale: 0.6 },
+  { name: 'PayPal',  logo: 'paypal.png', color: '#ffffff', logoScale: 2.5 },
 ]
 
 export type Token = {

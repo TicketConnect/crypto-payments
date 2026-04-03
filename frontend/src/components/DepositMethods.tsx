@@ -1,12 +1,17 @@
 import { SUPPORTED_CHAINS } from '../lib/constants'
 import { ChainLogo } from './ChainLogo'
+import { PeerOnrampButton } from './PeerOnrampButton'
 import './DepositMethods.css'
 
 type Props = {
   onSelectCrypto: () => void
+  onSelectWallet: () => void
+  onPeerStarted?: () => void
+  destinationChainId: number
+  destinationAddress?: string
 }
 
-export function DepositMethods({ onSelectCrypto }: Props) {
+export function DepositMethods({ onSelectCrypto, onSelectWallet, onPeerStarted, destinationChainId, destinationAddress }: Props) {
   return (
     <div className="deposit-methods">
       <button className="method-row" onClick={onSelectCrypto} type="button">
@@ -28,19 +33,32 @@ export function DepositMethods({ onSelectCrypto }: Props) {
         </div>
       </button>
 
-      <div className="method-row method-row--disabled">
-        <div className="method-icon method-icon--muted">
+      <button className="method-row" onClick={onSelectWallet} type="button">
+        <div className="method-icon method-icon--active">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            <rect x="2" y="6" width="20" height="14" rx="2" />
+            <path d="M2 10h20" />
+            <path d="M16 14h2" />
           </svg>
         </div>
         <div className="method-text">
-          <span className="method-title">Peer-to-peer</span>
-          <span className="method-subtitle">Revolut, Venmo & more</span>
+          <span className="method-title">Connect Wallet</span>
+          <span className="method-subtitle">Swap & bridge from your wallet</span>
         </div>
-        <span className="method-badge">Coming soon</span>
-      </div>
+        <div className="method-chains">
+          {SUPPORTED_CHAINS.filter(c => !c.comingSoon).map(chain => (
+            <span key={chain.id}>
+              <ChainLogo chain={chain} size={15} />
+            </span>
+          ))}
+        </div>
+      </button>
+
+      <PeerOnrampButton
+        destinationChainId={destinationChainId}
+        destinationAddress={destinationAddress}
+        onPeerStarted={onPeerStarted}
+      />
     </div>
   )
 }
