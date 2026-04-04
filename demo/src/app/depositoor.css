@@ -1,0 +1,325 @@
+/* ── Theme Variables ── */
+
+.depositoor-light {
+  --depositoor-bg: #ffffff;
+  --depositoor-surface: #f4f4f5;
+  --depositoor-surface-hover: #e4e4e7;
+  --depositoor-ring: rgba(0, 0, 0, 0.08);
+  --depositoor-text: #09090b;
+  --depositoor-text-secondary: #71717a;
+  --depositoor-text-muted: #a1a1aa;
+  --depositoor-accent: #2775CA;
+  --depositoor-success: #22c55e;
+  --depositoor-danger: #dc2626;
+  --depositoor-radius: 12px;
+  --depositoor-radius-lg: 16px;
+  --depositoor-font: system-ui, -apple-system, sans-serif;
+  --depositoor-font-mono: 'SF Mono', 'Fira Code', monospace;
+}
+
+.depositoor-dark {
+  --depositoor-bg: #0a0a0c;
+  --depositoor-surface: #101012;
+  --depositoor-surface-hover: #161618;
+  --depositoor-ring: rgba(255, 255, 255, 0.04);
+  --depositoor-text: #fafafa;
+  --depositoor-text-secondary: #71717a;
+  --depositoor-text-muted: #3f3f46;
+  --depositoor-accent: #2775CA;
+  --depositoor-success: #22c55e;
+  --depositoor-danger: #dc2626;
+  --depositoor-radius: 12px;
+  --depositoor-radius-lg: 16px;
+  --depositoor-font: system-ui, -apple-system, sans-serif;
+  --depositoor-font-mono: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* ── Widget Container ── */
+
+.depositoor-widget {
+  font-family: var(--depositoor-font);
+  color: var(--depositoor-text);
+  background: var(--depositoor-bg);
+  border-radius: 20px;
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow:
+    0 0 0 1px var(--depositoor-ring),
+    0 2px 8px -2px rgba(0, 0, 0, 0.1),
+    0 12px 32px -8px rgba(0, 0, 0, 0.15);
+}
+
+.depositoor-dark.depositoor-widget {
+  box-shadow:
+    0 0 0 1px var(--depositoor-ring),
+    0 2px 8px -2px rgba(0, 0, 0, 0.3),
+    0 24px 56px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Loading ── */
+
+.depositoor-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px 0;
+  color: var(--depositoor-text-secondary);
+  font-size: 14px;
+}
+
+.depositoor-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--depositoor-ring);
+  border-top-color: var(--depositoor-accent);
+  border-radius: 50%;
+  animation: depositoor-spin 0.8s linear infinite;
+}
+
+@keyframes depositoor-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Pending / QR ── */
+
+.depositoor-pending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.depositoor-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--depositoor-text-secondary);
+}
+
+.depositoor-qr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Details Panel ── */
+
+.depositoor-details {
+  width: 100%;
+  border-radius: var(--depositoor-radius-lg);
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--depositoor-ring);
+}
+
+.depositoor-detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--depositoor-surface);
+  border: none;
+  width: 100%;
+  text-align: left;
+  color: var(--depositoor-text);
+  font-family: var(--depositoor-font);
+  cursor: default;
+  transition: background 0.15s;
+}
+
+button.depositoor-detail {
+  cursor: pointer;
+}
+
+button.depositoor-detail:hover {
+  background: var(--depositoor-surface-hover);
+}
+
+.depositoor-detail + .depositoor-detail {
+  box-shadow: inset 0 1px 0 0 var(--depositoor-ring);
+}
+
+.depositoor-detail-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.depositoor-detail-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--depositoor-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.depositoor-detail-value {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.depositoor-addr {
+  font-family: var(--depositoor-font-mono);
+  font-size: 12px;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.depositoor-detail-action {
+  color: var(--depositoor-text-muted);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+button.depositoor-detail:hover .depositoor-detail-action {
+  color: var(--depositoor-text-secondary);
+}
+
+.depositoor-detail-action.is-copied {
+  color: var(--depositoor-success);
+}
+
+/* ── Chains ── */
+
+.depositoor-chains {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.depositoor-chain-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.depositoor-chain-names {
+  font-size: 13px;
+  color: var(--depositoor-text-secondary);
+}
+
+/* ── Status Row ── */
+
+.depositoor-status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--depositoor-text-muted);
+}
+
+.depositoor-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--depositoor-success);
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+  animation: depositoor-pulse 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes depositoor-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(34, 197, 94, 0);
+  }
+}
+
+/* ── Progress Steps ── */
+
+.depositoor-progress {
+  padding: 8px 0;
+}
+
+.depositoor-steps {
+  display: flex;
+  flex-direction: column;
+}
+
+.depositoor-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--depositoor-surface);
+  box-shadow: inset 0 1px 0 0 var(--depositoor-ring);
+  color: var(--depositoor-text-muted);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.depositoor-step:first-child {
+  border-radius: var(--depositoor-radius-lg) var(--depositoor-radius-lg) 0 0;
+  box-shadow: none;
+}
+
+.depositoor-step:last-child {
+  border-radius: 0 0 var(--depositoor-radius-lg) var(--depositoor-radius-lg);
+}
+
+.depositoor-step.done {
+  color: var(--depositoor-success);
+}
+
+.depositoor-step.active {
+  color: var(--depositoor-text);
+}
+
+.depositoor-step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.depositoor-step.active .depositoor-step-dot {
+  background: var(--depositoor-accent);
+  animation: depositoor-pulse-dot 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes depositoor-pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Error / Expired ── */
+
+.depositoor-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 0;
+}
+
+.depositoor-error-msg {
+  font-size: 14px;
+  color: var(--depositoor-danger);
+  text-align: center;
+}
+
+.depositoor-retry-btn {
+  height: 44px;
+  padding: 0 24px;
+  background: var(--depositoor-accent);
+  border: none;
+  border-radius: var(--depositoor-radius);
+  color: #fff;
+  font-family: var(--depositoor-font);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.depositoor-retry-btn:hover {
+  filter: brightness(1.15);
+}
