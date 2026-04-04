@@ -5,6 +5,7 @@ pub struct Config {
     pub implementation_address: String,
     pub fee_bps: u16,
     pub listen_addr: String,
+    pub uniswap_api_key: String,
 }
 
 impl Config {
@@ -18,6 +19,7 @@ impl Config {
                 .parse()?,
             listen_addr: std::env::var("LISTEN_ADDR")
                 .unwrap_or_else(|_| "0.0.0.0:3001".into()),
+            uniswap_api_key: std::env::var("UNISWAP_API_KEY")?,
         })
     }
 }
