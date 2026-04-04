@@ -7,6 +7,7 @@ import { DestinationPanel } from './components/DestinationPanel'
 import { DepositMethods } from './components/DepositMethods'
 import { SupportedAssets } from './components/SupportedAssets'
 import { PeerInProgress } from './components/PeerInProgress'
+import { PeerInstall } from './components/PeerInstall'
 import { ConnectWallet } from './components/ConnectWallet'
 import { TokenList } from './components/TokenList'
 import { DepositForm } from './components/DepositForm'
@@ -23,6 +24,7 @@ type View =
   | 'crypto'
   | 'assets'
   | 'peer'
+  | 'peer-install'
   | 'wallet-connect'
   | 'wallet-tokens'
   | 'wallet-deposit'
@@ -277,7 +279,7 @@ function App() {
 
   return (
     <div className="app">
-      <div className="main-card">
+      <div className={`main-card${view === 'methods' ? ' main-card--compact' : ''}`}>
         <div className="card-header">
           {view === 'methods' ? (
             <span className="card-title">Deposit</span>
@@ -295,12 +297,12 @@ function App() {
               />
               <div style={{ width: 40 }} />
             </>
-          ) : view === 'peer' ? (
+          ) : view === 'peer' || view === 'peer-install' ? (
             <>
               <button className="back-btn" onClick={() => setView('methods')} type="button">
                 {backIcon}
               </button>
-              <span className="card-title">Peer-to-peer</span>
+              <span className="card-title">{view === 'peer-install' ? 'Install Peer' : 'Peer-to-peer'}</span>
               <div style={{ width: 40 }} />
             </>
           ) : view === 'assets' ? (
@@ -336,44 +338,47 @@ function App() {
           ) : null}
         </div>
 
-        {view === 'crypto' ? (
-          <QRContent wallet={activeWallet} session={session} onShowAssets={(chainId) => { setAssetsChainId(chainId); setView('assets') }} />
-        ) : view === 'assets' ? (
-          <SupportedAssets initialChainId={assetsChainId} />
-        ) : view === 'peer' ? (
-          <PeerInProgress
-            destinationChainId={activeWallet.destinationChainId}
-            destinationAddress={activeWallet.destinationAddress || undefined}
-          />
-        ) : view === 'wallet-connect' ? (
-          <ConnectWallet />
-        ) : view === 'wallet-tokens' && wallet.address ? (
-          <TokenList walletAddress={wallet.address} onSelect={handleTokenSelect} />
-        ) : view === 'wallet-deposit' && selectedToken ? (
-          <DepositForm token={selectedToken} onSubmit={handleDepositSubmit} onBack={walletBackTo('wallet-tokens')} />
-        ) : view === 'wallet-confirm' && quote ? (
-          <DepositConfirm quote={quote} onConfirm={handleConfirm} onCancel={walletBackTo('wallet-deposit')} signing={signing} />
-        ) : view === 'wallet-status' && walletTxHash && walletSessionId ? (
-          <DepositStatus txHash={walletTxHash} sessionId={walletSessionId} onDone={handleWalletDone} />
-        ) : (
-          <DepositMethods
-            onSelectCrypto={() => setView('crypto')}
-            onSelectWallet={handleSelectWallet}
-            onPeerStarted={() => setView('peer')}
-            destinationChainId={activeWallet.destinationChainId}
-            destinationAddress={activeWallet.destinationAddress || undefined}
-          />
-        )}
+        <div className="card-body">
+          {view === 'crypto' ? (
+            <QRContent wallet={activeWallet} session={session} onShowAssets={(chainId) => { setAssetsChainId(chainId); setView('assets') }} />
+          ) : view === 'assets' ? (
+            <SupportedAssets initialChainId={assetsChainId} />
+          ) : view === 'peer' ? (
+            <PeerInProgress
+              destinationChainId={activeWallet.destinationChainId}
+              destinationAddress={activeWallet.destinationAddress || undefined}
+            />
+          ) : view === 'peer-install' ? (
+            <PeerInstall />
+          ) : view === 'wallet-connect' ? (
+            <ConnectWallet />
+          ) : view === 'wallet-tokens' && wallet.address ? (
+            <TokenList walletAddress={wallet.address} onSelect={handleTokenSelect} />
+          ) : view === 'wallet-deposit' && selectedToken ? (
+            <DepositForm token={selectedToken} onSubmit={handleDepositSubmit} onBack={walletBackTo('wallet-tokens')} />
+          ) : view === 'wallet-confirm' && quote ? (
+            <DepositConfirm quote={quote} onConfirm={handleConfirm} onCancel={walletBackTo('wallet-deposit')} signing={signing} />
+          ) : view === 'wallet-status' && walletTxHash && walletSessionId ? (
+            <DepositStatus txHash={walletTxHash} sessionId={walletSessionId} onDone={handleWalletDone} />
+          ) : (
+            <DepositMethods
+              onSelectCrypto={() => setView('crypto')}
+              onSelectWallet={handleSelectWallet}
+              onPeerStarted={() => setView('peer')}
+              onNeedsInstall={() => setView('peer-install')}
+              destinationChainId={activeWallet.destinationChainId}
+              destinationAddress={activeWallet.destinationAddress || undefined}
+            />
+          )}
+        </div>
       </div>
 
-      {view === 'methods' && (
-        <DestinationPanel
-          destinationChainId={activeWallet.destinationChainId}
-          destinationAddress={activeWallet.destinationAddress}
-          onChainChange={handleChainChange}
-          onAddressChange={handleAddressChange}
-        />
-      )}
+      <DestinationPanel
+        destinationChainId={activeWallet.destinationChainId}
+        destinationAddress={activeWallet.destinationAddress}
+        onChainChange={handleChainChange}
+        onAddressChange={handleAddressChange}
+      />
     </div>
   )
 }

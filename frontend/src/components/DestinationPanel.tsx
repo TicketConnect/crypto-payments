@@ -14,7 +14,7 @@ type Props = {
 const availableChains = SUPPORTED_CHAINS.filter(c => !c.comingSoon)
 
 export function DestinationPanel({ destinationChainId, destinationAddress, onChainChange, onAddressChange }: Props) {
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
   const activeChain = availableChains.find(c => c.id === destinationChainId) ?? availableChains[0]
 
   return (

@@ -4,17 +4,12 @@ import EthereumProvider from '@walletconnect/ethereum-provider'
 import type { WalletProviderDetail, EIP1193Provider } from './wallets'
 
 // ---------------------------------------------------------------------------
-// Placeholder icons (will be replaced with real ones later)
+// Wallet icon config (SVGs in /wallet-logos/, styled like chain icons)
 // ---------------------------------------------------------------------------
 
-const PORTO_ICON =
-  'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23000"/><text x="50" y="67" text-anchor="middle" fill="white" font-size="50" font-family="sans-serif">P</text></svg>'
-
-const COINBASE_ICON =
-  'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%230052FF"/><text x="50" y="67" text-anchor="middle" fill="white" font-size="50" font-family="sans-serif">C</text></svg>'
-
-const WALLETCONNECT_ICON =
-  'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%233B99FC"/><text x="50" y="67" text-anchor="middle" fill="white" font-size="50" font-family="sans-serif">W</text></svg>'
+const PORTO_ICON = { icon: '/wallet-logos/porto.svg', logoBg: '#000000', logoScale: 0.55 }
+const COINBASE_ICON = { icon: '/wallet-logos/coinbase.svg', logoBg: '#0000FF' }
+const WALLETCONNECT_ICON = { icon: '/wallet-logos/walletconnect.svg', logoBg: '#3396FF', logoScale: 1.0 }
 
 // ---------------------------------------------------------------------------
 // Adapter: wrap any object with request/on/removeListener into our minimal
@@ -56,8 +51,10 @@ export function createPortoProvider(): WalletProviderDetail {
     info: {
       uuid: 'porto-smart-wallet',
       name: 'Porto',
-      icon: PORTO_ICON,
+      icon: PORTO_ICON.icon,
       rdns: 'xyz.ithaca.porto',
+      logoBg: PORTO_ICON.logoBg,
+      logoScale: PORTO_ICON.logoScale,
     },
     ecosystems: ['evm'],
     provider: toEIP1193(porto.provider),
@@ -80,8 +77,9 @@ export function createCoinbaseSmartWalletProvider(): WalletProviderDetail {
     info: {
       uuid: 'coinbase-smart-wallet',
       name: 'Coinbase Smart Wallet',
-      icon: COINBASE_ICON,
+      icon: COINBASE_ICON.icon,
       rdns: 'com.coinbase.wallet',
+      logoBg: COINBASE_ICON.logoBg,
     },
     ecosystems: ['evm'],
     provider: toEIP1193(sdk.getProvider()),
@@ -120,8 +118,10 @@ export async function createWalletConnectProvider(): Promise<WalletProviderDetai
     info: {
       uuid: 'walletconnect',
       name: 'WalletConnect',
-      icon: WALLETCONNECT_ICON,
+      icon: WALLETCONNECT_ICON.icon,
       rdns: 'com.walletconnect',
+      logoBg: WALLETCONNECT_ICON.logoBg,
+      logoScale: WALLETCONNECT_ICON.logoScale,
     },
     ecosystems: ['evm'],
     provider,

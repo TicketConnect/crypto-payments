@@ -13,8 +13,10 @@ export type { StandardWallet }
 export interface WalletProviderInfo {
   uuid: string
   name: string
-  icon: string  // data URI or URL
-  rdns: string  // reverse DNS identifier
+  icon: string        // data URI or URL
+  rdns: string        // reverse DNS identifier
+  logoBg?: string     // background color behind icon (like ChainLogo)
+  logoScale?: number  // 0-1+ scale of icon inside square (default 0.75 when logoBg set)
 }
 
 // EIP-1193 provider interface

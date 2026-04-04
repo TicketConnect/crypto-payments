@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useWallet } from './WalletProvider'
+import { WalletLogo } from './WalletLogo'
 import type { WalletProviderDetail, Ecosystem } from '../lib/wallets'
 import './ConnectWallet.css'
 
@@ -21,10 +22,11 @@ function WalletOption({ detail, connect }: {
   return (
     <div className="wallet-option-wrapper">
       <button className="wallet-option" onClick={handleClick}>
-        <img
-          src={detail.info.icon}
-          alt={detail.info.name}
-          className="wallet-option-icon"
+        <WalletLogo
+          icon={detail.info.icon}
+          name={detail.info.name}
+          logoBg={detail.info.logoBg}
+          logoScale={detail.info.logoScale}
         />
         <span className="wallet-option-name">{detail.info.name}</span>
         {isMultiChain && (

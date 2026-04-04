@@ -1,10 +1,17 @@
 .dest-panel {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 400px;
   background: var(--card);
-  border-radius: 16px;
+  border-radius: 16px 16px 0 0;
   box-shadow:
     0 0 0 1px var(--ring),
-    0 2px 8px -2px rgba(0, 0, 0, 0.3);
+    0 -4px 24px -4px rgba(0, 0, 0, 0.4);
   overflow: hidden;
+  z-index: 10;
 }
 
 .dest-header {
