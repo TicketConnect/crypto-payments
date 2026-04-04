@@ -1,0 +1,45 @@
+{
+  "name": "@depositoor/react",
+  "version": "0.1.0",
+  "description": "Drop-in deposit widget for any ERC-20 to USDC",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18",
+    "viem": ">=2.0"
+  },
+  "dependencies": {
+    "cuer": "^0.0.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0",
+    "viem": "^2.46.0"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "license": "MIT"
+}
