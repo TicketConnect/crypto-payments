@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { QRCodeSVG } from 'qrcode.react'
+import { Cuer } from 'cuer'
 import type { StoredWallet } from '../App'
 import type { Session } from '../hooks/useSession'
 import { SUPPORTED_CHAINS } from '../lib/constants'
@@ -28,23 +28,7 @@ export function QRContent({ wallet, session, onShowAssets }: Props) {
       <p className="qr-title">Deposit Address</p>
 
       <div className="qr-frame">
-        <QRCodeSVG
-          value={wallet.address}
-          size={260}
-          bgColor="transparent"
-          fgColor="#ffffff"
-          level="H"
-          includeMargin={false}
-        />
-        <div className="qr-badge">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-            <circle cx="18" cy="18" r="18" fill="#2775CA" />
-            <path
-              d="M23 20.8c0-2.3-1.4-3-4.1-3.4-.6-.1-1.2-.2-1.6-.5-.7-.3-1-.7-1-1.4 0-.6.5-1.2 1.5-1.3 1-.1 1.8.1 2.6.6.2.1.3.1.4 0l.5-.8c.1-.2.1-.3 0-.4-.9-.6-1.9-.8-2.8-.9v-1.5c0-.2-.1-.3-.3-.3h-.9c-.2 0-.3.1-.3.3v1.5c-1.9.2-3.1 1.4-3.1 3 0 2.1 1.4 2.9 4.1 3.2.6.1 1.1.2 1.5.5.7.3 1 .8 1 1.5 0 .9-.7 1.5-1.8 1.6-1.1.1-2.2-.2-3.1-.8-.2-.1-.3-.1-.4 0l-.5.8c-.1.2-.1.3 0 .4 1 .7 2.2 1 3.4 1.1v1.6c0 .2.1.3.3.3h.9c.2 0 .3-.1.3-.3v-1.6c2-.3 3.3-1.5 3.3-3.2z"
-              fill="white"
-            />
-          </svg>
-        </div>
+        <Cuer value={wallet.address} size={180} color="#ffffff" />
       </div>
 
       <div className="qr-details">

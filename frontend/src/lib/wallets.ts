@@ -1,5 +1,13 @@
+import type { Wallet as StandardWallet } from '@wallet-standard/base'
+
+// Ecosystem discriminator
+export type Ecosystem = 'evm' | 'solana'
+
 // Wallet source discriminator
-export type WalletSource = 'eip6963' | 'porto' | 'coinbase-smart-wallet'
+export type WalletSource = 'eip6963' | 'porto' | 'coinbase-smart-wallet' | 'walletconnect' | 'wallet-standard'
+
+// Re-export for consumers
+export type { StandardWallet }
 
 // Provider metadata
 export interface WalletProviderInfo {
@@ -19,7 +27,9 @@ export interface EIP1193Provider {
 // Generalized wallet provider detail
 export interface WalletProviderDetail {
   info: WalletProviderInfo
-  provider: EIP1193Provider
+  ecosystems: Ecosystem[]
+  provider?: EIP1193Provider          // present when ecosystems includes 'evm'
+  solanaWallet?: StandardWallet       // present when ecosystems includes 'solana'
   source: WalletSource
 }
 
@@ -43,6 +53,7 @@ export function discoverProviders(
     onProvider({
       info: event.detail.info,
       provider: event.detail.provider,
+      ecosystems: ['evm'],
       source: 'eip6963',
     })
   }
