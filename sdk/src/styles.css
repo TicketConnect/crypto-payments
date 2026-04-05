@@ -195,6 +195,22 @@
   white-space: nowrap;
 }
 
+.depositoor-method--disabled {
+  opacity: 0.45;
+  pointer-events: none;
+  cursor: default;
+}
+
+.depositoor-method-badge {
+  font-size: 11px;
+  color: var(--depositoor-text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 4px 10px;
+  border-radius: 99px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 .depositoor-method-chains {
   display: flex;
   gap: 3px;

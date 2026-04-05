@@ -933,9 +933,10 @@ export function DepositWidget({
                 </button>
 
                 <button
-                  className="depositoor-method"
+                  className="depositoor-method depositoor-method--disabled"
                   onClick={() => onWalletConnect?.()}
                   type="button"
+                  disabled={!onWalletConnect}
                 >
                   <div className="depositoor-method-icon depositoor-method-icon--default">
                     {walletIcon}
@@ -944,13 +945,17 @@ export function DepositWidget({
                     <span className="depositoor-method-title">Pay from Wallet</span>
                     <span className="depositoor-method-subtitle">Connect and send any token</span>
                   </div>
-                  <div className="depositoor-method-chains">
-                    {visibleChains.map(chain => (
-                      <span key={chain.id}>
-                        <ChainLogo chain={chain} size={15} />
-                      </span>
-                    ))}
-                  </div>
+                  {onWalletConnect ? (
+                    <div className="depositoor-method-chains">
+                      {visibleChains.map(chain => (
+                        <span key={chain.id}>
+                          <ChainLogo chain={chain} size={15} />
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="depositoor-method-badge">Soon</span>
+                  )}
                 </button>
 
                 <button

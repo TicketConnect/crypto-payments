@@ -60,6 +60,29 @@ pub async fn insert_session(
     req: &RegisterSessionRequest,
     dest_cctp_domain: u32,
 ) -> eyre::Result<DepositSession> {
+    // If a pending session already exists for this burner, update it
+    let existing = sqlx::query_as::<_, DepositSession>(
+        "UPDATE sessions SET
+            eip7702_auth = $2,
+            dest_address = $3,
+            dest_chain_id = $4,
+            dest_cctp_domain = $5,
+            updated_at = now()
+         WHERE LOWER(burner_address) = LOWER($1) AND status = 'pending'
+         RETURNING *",
+    )
+    .bind(&req.burner_address)
+    .bind(&req.eip7702_auth)
+    .bind(&req.destination_address)
+    .bind(req.destination_chain)
+    .bind(dest_cctp_domain as i32)
+    .fetch_optional(pool)
+    .await?;
+
+    if let Some(session) = existing {
+        return Ok(session);
+    }
+
     let session = sqlx::query_as::<_, DepositSession>(
         "INSERT INTO sessions (burner_address, eip7702_auth, dest_address, dest_chain_id, dest_cctp_domain)
          VALUES ($1, $2, $3, $4, $5)
