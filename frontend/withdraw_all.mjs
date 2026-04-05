@@ -9,7 +9,7 @@ const publicClient = createPublicClient({ chain: base, transport });
 const GATEWAY_WALLET = '0x77777777Dcc4d5A8B6E418Fd04D8997ef11000eE';
 const GATEWAY_MINTER = '0x2222222d7164433c4C09B0b0D809a9b52C04C205';
 const BASE_USDC = '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913';
-const RELAYER = '0x1088C263F8ED1BceAdeDbD0147af9d78DEF134e7';
+const RELAYER = '0x3C3Cc15159145aa1Eb07b03E82b56D677316A9dA';
 const toB32 = (addr) => pad(addr.toLowerCase(), { size: 32 });
 
 const types = {

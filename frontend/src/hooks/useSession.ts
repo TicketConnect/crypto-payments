@@ -106,6 +106,17 @@ export function useSession(
     }
   }, [burnerAddress, signedAuth, destinationAddress, destinationChainId, connectSSE])
 
+  // Reset session when burner address changes
+  const prevBurnerRef = useRef(burnerAddress)
+  useEffect(() => {
+    if (prevBurnerRef.current !== burnerAddress) {
+      prevBurnerRef.current = burnerAddress
+      closeSSE()
+      setSession(null)
+      setError(null)
+    }
+  }, [burnerAddress, closeSSE])
+
   // Auto-register when destination is configured
   useEffect(() => {
     if (burnerAddress && signedAuth && destinationAddress && !session) {

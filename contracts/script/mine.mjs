@@ -8,7 +8,7 @@ const require = createRequire(import.meta.url);
 const { keccak_256 } = require("@noble/hashes/sha3.js");
 
 const FACTORY = "0xDc83FD2a9567c8B2e7Efd2328580c824ad0ab62D";
-const DEPLOYER = "0x11812dfebE78199D29Ab23017f7166a05d6bb144";
+const DEPLOYER = "0x7664Cb8305a9c62F93E4886F53027f4debeE6EbB";
 const PREFIX = (process.argv[2] || "33333").toLowerCase();
 
 const PROXY_INITCODE_HASH = Buffer.from(

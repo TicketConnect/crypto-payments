@@ -165,7 +165,7 @@ PEER_METHODS        // P2P payment methods (Venmo, Revolut, etc.)
 SUPPORTED_TOKENS    // Token configs with per-chain addresses
 ```
 
-`IMPL_ADDRESS` is `0x33333393A5EdE0c5E257b836034b8ab48078f53c` on all chains. `API_URL` defaults to `http://localhost:3001` and is overridden via `VITE_API_URL` at build time.
+`IMPL_ADDRESS` is `0x33333A781cbe9aC82Ba510BfF7b26c47a8FDecD4` on all chains. `API_URL` defaults to `http://localhost:3001` and is overridden via `VITE_API_URL` at build time.
 
 ## Build
 

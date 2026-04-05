@@ -1,4 +1,4 @@
-export const IMPL_ADDRESS = '0x33333393A5EdE0c5E257b836034b8ab48078f53c' as const
+export const IMPL_ADDRESS = '0x33333A781cbe9aC82Ba510BfF7b26c47a8FDecD4' as const
 
 export const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
 

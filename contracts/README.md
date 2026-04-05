@@ -45,15 +45,15 @@ Minimal CREATE3 factory for deterministic cross-chain deployments. Deployed via 
 
 ## Deployments
 
-DepositoorDelegate is deployed at **`0x33333393A5EdE0c5E257b836034b8ab48078f53c`** on all chains.
+DepositoorDelegate is deployed at **`0x33333A781cbe9aC82Ba510BfF7b26c47a8FDecD4`** on all chains.
 
 | Chain | Chain ID | WETH | Explorer |
 |-------|----------|------|----------|
-| Ethereum | 1 | `0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2` | [etherscan](https://etherscan.io/address/0x33333393A5EdE0c5E257b836034b8ab48078f53c) |
-| Arbitrum | 42161 | `0x82aF49447D8a07e3bd95BD0d56f35241523fBab1` | [arbiscan](https://arbiscan.io/address/0x33333393A5EdE0c5E257b836034b8ab48078f53c) |
-| Base | 8453 | `0x4200000000000000000000000000000000000006` | [basescan](https://basescan.org/address/0x33333393A5EdE0c5E257b836034b8ab48078f53c) |
-| Optimism | 10 | `0x4200000000000000000000000000000000000006` | [optimistic](https://optimistic.etherscan.io/address/0x33333393A5EdE0c5E257b836034b8ab48078f53c) |
-| Polygon | 137 | `0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270` | [polygonscan](https://polygonscan.com/address/0x33333393A5EdE0c5E257b836034b8ab48078f53c) |
+| Ethereum | 1 | `0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2` | [etherscan](https://etherscan.io/address/0x33333A781cbe9aC82Ba510BfF7b26c47a8FDecD4) |
+| Arbitrum | 42161 | `0x82aF49447D8a07e3bd95BD0d56f35241523fBab1` | [arbiscan](https://arbiscan.io/address/0x33333A781cbe9aC82Ba510BfF7b26c47a8FDecD4) |
+| Base | 8453 | `0x4200000000000000000000000000000000000006` | [basescan](https://basescan.org/address/0x33333A781cbe9aC82Ba510BfF7b26c47a8FDecD4) |
+| Optimism | 10 | `0x4200000000000000000000000000000000000006` | [optimistic](https://optimistic.etherscan.io/address/0x33333A781cbe9aC82Ba510BfF7b26c47a8FDecD4) |
+| Polygon | 137 | `0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270` | [polygonscan](https://polygonscan.com/address/0x33333A781cbe9aC82Ba510BfF7b26c47a8FDecD4) |
 
 Create3Factory: `0xDc83FD2a9567c8B2e7Efd2328580c824ad0ab62D` (all chains)
 
