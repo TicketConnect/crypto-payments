@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  flex: 1;
 }
 
 .qr-title {
@@ -141,6 +142,7 @@ button.detail:hover .detail-action {
 /* ── Status ── */
 
 .qr-status {
+  margin-top: auto;
   display: flex;
   align-items: center;
   gap: 10px;

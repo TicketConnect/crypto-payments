@@ -652,9 +652,9 @@ export function DepositWidget({
       })
   }, [createWallet])
 
-  // ── Register session when we have a wallet + destination ──
+  // ── Register session when user enters crypto view ──
   useEffect(() => {
-    if (!activeWallet || !destAddress || session) return
+    if (view !== 'crypto' || !activeWallet || !destAddress || session) return
 
     let cancelled = false
 
@@ -692,7 +692,7 @@ export function DepositWidget({
     register()
 
     return () => { cancelled = true }
-  }, [activeWallet, destAddress, destChainId, apiUrl, session])
+  }, [view, activeWallet, destAddress, destChainId, apiUrl, session])
 
   // ── Expiry timer ──
   useEffect(() => {

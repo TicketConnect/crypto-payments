@@ -49,7 +49,7 @@ export default function LandingPage() {
                     <span className="text-[#ffcb6b]">DepositoorProvider</span>{' '}
                     <span className="text-[#c792ea]">apiUrl</span>
                     <span className="text-[#89ddff]">=</span>
-                    <span className="text-[#c3e88d]">"https://api.depositoor.xyz"</span>
+                    <span className="text-[#c3e88d]">"https://depositoor.xyz/api"</span>
                     <span className="text-[#89ddff]">&gt;</span>
                     <br />
                     <div className="pl-4">

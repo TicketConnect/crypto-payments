@@ -2,7 +2,7 @@
   position: relative;
   width: 100%;
   max-width: 400px;
-  height: 470px;
+  min-height: 540px;
   display: flex;
   flex-direction: column;
 }
@@ -14,8 +14,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height: 520px;
-  transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 520px;
+  transition: min-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow:
     0 0 0 1px var(--ring),
     0 2px 8px -2px rgba(0, 0, 0, 0.3),
@@ -23,7 +23,7 @@
 }
 
 .main-card--compact {
-  height: 420px;
+  min-height: 490px;
 }
 
 .card-body {
