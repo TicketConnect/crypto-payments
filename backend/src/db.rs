@@ -13,7 +13,6 @@ pub async fn init_db(pool: &PgPool) -> eyre::Result<()> {
             eip7702_auth      JSONB NOT NULL,
             dest_address      TEXT NOT NULL,
             dest_chain_id     INTEGER NOT NULL,
-            dest_cctp_domain  INTEGER NOT NULL,
             status            TEXT NOT NULL DEFAULT 'pending',
             source_chain_id   INTEGER,
             detected_token    TEXT,
@@ -35,6 +34,19 @@ pub async fn init_db(pool: &PgPool) -> eyre::Result<()> {
     )
     .execute(pool)
     .await?;
+
+    // Migration: drop legacy CCTP column from older deployments. Bridging now
+    // goes through Uniswap BRIDGE routing (Across), not Circle CCTP.
+    sqlx::query("ALTER TABLE sessions DROP COLUMN IF EXISTS dest_cctp_domain")
+        .execute(pool)
+        .await?;
+
+    // Add uniqueness constraint to prevent duplicate sessions for the same burner
+sqlx::query(
+            "CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_burner_unique ON sessions(burner_address) WHERE status IN ('pending', 'failed')",
+        )
+        .execute(pool)
+        .await?;
 
     sqlx::query(
         "CREATE INDEX IF NOT EXISTS idx_sessions_burner ON sessions(burner_address, status)",
@@ -58,41 +70,30 @@ pub async fn init_db(pool: &PgPool) -> eyre::Result<()> {
 pub async fn insert_session(
     pool: &PgPool,
     req: &RegisterSessionRequest,
-    dest_cctp_domain: u32,
 ) -> eyre::Result<DepositSession> {
-    // If a pending session already exists for this burner, update it
-    let existing = sqlx::query_as::<_, DepositSession>(
-        "UPDATE sessions SET
-            eip7702_auth = $2,
-            dest_address = $3,
-            dest_chain_id = $4,
-            dest_cctp_domain = $5,
-            updated_at = now()
-         WHERE LOWER(burner_address) = LOWER($1) AND status = 'pending'
-         RETURNING *",
+    // Don't allow overwriting an active pending session — that would let a
+    // second register call redirect the buyer's funds to a new dest_address.
+    let existing_pending = sqlx::query_as::<_, DepositSession>(
+        "SELECT * FROM sessions
+         WHERE LOWER(burner_address) = LOWER($1) AND status = 'pending'",
     )
     .bind(&req.burner_address)
-    .bind(&req.eip7702_auth)
-    .bind(&req.destination_address)
-    .bind(req.destination_chain)
-    .bind(dest_cctp_domain as i32)
     .fetch_optional(pool)
     .await?;
 
-    if let Some(session) = existing {
-        return Ok(session);
+    if existing_pending.is_some() {
+        return Err(eyre::eyre!("a pending session already exists for this burner"));
     }
 
     let session = sqlx::query_as::<_, DepositSession>(
-        "INSERT INTO sessions (burner_address, eip7702_auth, dest_address, dest_chain_id, dest_cctp_domain)
-         VALUES ($1, $2, $3, $4, $5)
+        "INSERT INTO sessions (burner_address, eip7702_auth, dest_address, dest_chain_id)
+         VALUES ($1, $2, $3, $4)
          RETURNING *",
     )
     .bind(&req.burner_address)
     .bind(&req.eip7702_auth)
     .bind(&req.destination_address)
     .bind(req.destination_chain)
-    .bind(dest_cctp_domain as i32)
     .fetch_one(pool)
     .await?;
 
@@ -108,7 +109,8 @@ pub async fn get_session(pool: &PgPool, id: Uuid) -> eyre::Result<Option<Deposit
     Ok(session)
 }
 
-/// Get all burner addresses with pending sessions (for ETH balance polling).
+/// Get all burner addresses with pending sessions (for native gas balance polling).
+/// First-chain-wins design: any chain may detect, advisory-locked claim resolves races.
 pub async fn get_pending_burners(pool: &PgPool) -> eyre::Result<Vec<(uuid::Uuid, String)>> {
     let rows = sqlx::query_as::<_, (uuid::Uuid, String)>(
         "SELECT id, burner_address FROM sessions WHERE status IN ('pending', 'failed') AND created_at > now() - interval '30 minutes'",
@@ -151,7 +153,8 @@ pub async fn claim_for_detection(
         .execute(&mut *tx)
         .await?;
 
-    // Update if pending or failed (re-deposit to same burner)
+    // First-chain-wins: any indexer that races to this row first sets source_chain_id.
+    // Advisory lock above ensures no other chain can subsequently overwrite.
     let result = sqlx::query(
         "UPDATE sessions SET
             status = 'detected',
@@ -321,7 +324,7 @@ pub async fn mark_bridging(
     Ok(())
 }
 
-/// Mark a bridging session as fully swept (bridge confirmed).
+/// Mark a bridging session as fully swept (bridge confirmed on dest chain).
 pub async fn mark_bridge_complete(
     pool: &PgPool,
     session_id: Uuid,
@@ -342,6 +345,49 @@ pub async fn mark_bridge_complete(
         .await?;
 
     Ok(())
+}
+
+/// Mark a bridging session as terminally failed (bridge reported FAILED/EXPIRED).
+pub async fn mark_bridge_failed(
+    pool: &PgPool,
+    session_id: Uuid,
+    error_msg: &str,
+) -> eyre::Result<()> {
+    sqlx::query(
+        "UPDATE sessions SET
+            status = 'failed',
+            error_message = $2,
+            updated_at = now()
+         WHERE id = $1 AND status = 'bridging'",
+    )
+    .bind(session_id)
+    .bind(error_msg)
+    .execute(pool)
+    .await?;
+
+    sqlx::query("SELECT pg_notify('session_updates', $1::text)")
+        .bind(session_id)
+        .execute(pool)
+        .await?;
+
+    Ok(())
+}
+
+/// Fetch all sessions currently in `bridging` state on a given source chain.
+/// Used by the bridge-status poller to advance them to `swept` or `failed`.
+pub async fn get_bridging_sessions(
+    pool: &PgPool,
+    source_chain_id: i32,
+) -> eyre::Result<Vec<DepositSession>> {
+    let rows = sqlx::query_as::<_, DepositSession>(
+        "SELECT * FROM sessions
+         WHERE status = 'bridging' AND source_chain_id = $1
+         ORDER BY updated_at ASC",
+    )
+    .bind(source_chain_id)
+    .fetch_all(pool)
+    .await?;
+    Ok(rows)
 }
 
 /// Mark a sweep as failed, increment retry count or mark as permanently failed.

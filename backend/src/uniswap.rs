@@ -14,6 +14,16 @@ pub struct ApiTx {
 /// can spread it directly into the /swap request body without field-mapping.
 pub type QuoteResponse = serde_json::Value;
 
+/// Extract price impact percent from a quote response
+pub fn get_price_impact_percent(quote: &QuoteResponse) -> Option<f64> {
+    quote.get("priceImpact")
+        .and_then(|v| v.as_str())
+        .and_then(|s| s.trim_end_matches('%').parse().ok())
+}
+
+/// Status of a cross-chain swap/bridge as reported by Uniswap's `/swaps`
+/// endpoint. Used by the bridge-status poller to transition cross-chain
+/// sessions from `bridging` → `swept` (or to a terminal failure).
 #[derive(Debug, Clone, PartialEq)]
 pub enum SwapStatus {
     Pending,
@@ -21,20 +31,6 @@ pub enum SwapStatus {
     Failed,
     NotFound,
     Expired,
-}
-
-#[derive(Debug, Serialize)]
-#[serde(rename_all = "camelCase")]
-struct CheckApprovalRequest<'a> {
-    wallet_address: &'a str,
-    token: &'a str,
-    amount: &'a str,
-    chain_id: u64,
-}
-
-#[derive(Debug, Deserialize)]
-struct CheckApprovalResponse {
-    approval: Option<ApiTx>,
 }
 
 #[derive(Debug, Serialize)]
@@ -60,7 +56,10 @@ struct SwapResponse {
 }
 
 fn build_client() -> reqwest::Client {
-    reqwest::Client::new()
+    reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(30))
+        .build()
+        .unwrap()
 }
 
 fn headers(api_key: &str, cross_chain: bool) -> reqwest::header::HeaderMap {
@@ -73,29 +72,6 @@ fn headers(api_key: &str, cross_chain: bool) -> reqwest::header::HeaderMap {
         map.insert("x-chained-actions-enabled", "true".parse().unwrap());
     }
     map
-}
-
-/// Returns an approval transaction if the token needs to be approved, or None.
-pub async fn check_approval(
-    api_key: &str,
-    chain_id: u64,
-    wallet_address: &str,
-    token: &str,
-    amount: &str,
-) -> eyre::Result<Option<ApiTx>> {
-    let body = CheckApprovalRequest { wallet_address, token, amount, chain_id };
-
-    let resp: CheckApprovalResponse = build_client()
-        .post(format!("{BASE_URL}/check_approval"))
-        .headers(headers(api_key, false))
-        .json(&body)
-        .send()
-        .await?
-        .error_for_status()?
-        .json()
-        .await?;
-
-    Ok(resp.approval)
 }
 
 /// Get a quote from the Uniswap Trading API.
@@ -152,6 +128,8 @@ pub async fn get_swap_calldata(
 }
 
 /// Get a BRIDGE quote for USDC → USDC cross-chain.
+/// `slippage_tolerance` and `max_price_impact_percent` come from app config so
+/// thresholds stay consistent with same-chain swaps.
 pub async fn get_bridge_quote(
     api_key: &str,
     swapper: &str,
@@ -160,6 +138,8 @@ pub async fn get_bridge_quote(
     source_chain_id: u64,
     dest_chain_id: u64,
     amount: &str,
+    slippage_tolerance: f64,
+    max_price_impact_percent: f64,
 ) -> eyre::Result<QuoteResponse> {
     let params = QuoteParams {
         swapper: swapper.to_string(),
@@ -169,11 +149,17 @@ pub async fn get_bridge_quote(
         token_out_chain_id: dest_chain_id.to_string(),
         amount: amount.to_string(),
         quote_type: "EXACT_INPUT".into(),
-        slippage_tolerance: 0.5,
+        slippage_tolerance,
         routing_preference: "BEST_PRICE".into(),
     };
 
     let resp = get_quote(api_key, params, true).await?;
+
+    if let Some(price_impact) = get_price_impact_percent(&resp) {
+        if price_impact > max_price_impact_percent {
+            return Err(eyre::eyre!("price impact too high: {}%", price_impact));
+        }
+    }
 
     let routing = resp["routing"].as_str().unwrap_or("");
     if routing != "BRIDGE" {

@@ -2,14 +2,15 @@
 pragma solidity ^0.8.28;
 
 import {ERC7821} from "solady/accounts/ERC7821.sol";
+import {SafeTransferLib} from "solady/utils/SafeTransferLib.sol";
 
-interface IERC20 {
-    function balanceOf(address) external view returns (uint256);
-    function transfer(address, uint256) external returns (bool);
-    function approve(address, uint256) external returns (bool);
+interface IWETH {
+    function deposit() external payable;
 }
 
 contract DepositoorDelegate is ERC7821 {
+    /// @notice The wrapped-native token for this chain (WETH on most, WPOL on Polygon, etc).
+    /// Named `weth` for backward-compatibility with the deploy script; semantically wrapped-native.
     address public immutable weth;
     address public immutable keeper;
 
@@ -19,11 +20,13 @@ contract DepositoorDelegate is ERC7821 {
     }
 
     /// @notice Sweep the entire balance of a token to a recipient.
+    /// @dev Uses SafeTransferLib so non-conforming tokens (e.g. USDT, which
+    ///      does not return a bool from `transfer`) work correctly.
     function sweep(address token, address to) external {
         require(msg.sender == keeper || msg.sender == address(this), "unauthorized");
-        uint256 bal = IERC20(token).balanceOf(address(this));
+        uint256 bal = SafeTransferLib.balanceOf(token, address(this));
         if (bal > 0) {
-            require(IERC20(token).transfer(to, bal), "transfer failed");
+            SafeTransferLib.safeTransfer(token, to, bal);
         }
     }
 
@@ -41,8 +44,13 @@ contract DepositoorDelegate is ERC7821 {
         revert("opData not supported");
     }
 
+    /// @notice Auto-wrap incoming native gas into the canonical wrapped-native token.
+    /// @dev Calls IWETH.deposit() explicitly. Some non-OP-Stack wrapped-native
+    ///      contracts do not have a payable fallback, so the explicit call is
+    ///      required for portability.
     receive() external payable override {
-        (bool success,) = weth.call{value: msg.value}("");
-        require(success, "WETH wrap failed");
+        if (msg.value > 0) {
+            IWETH(weth).deposit{value: msg.value}();
+        }
     }
 }

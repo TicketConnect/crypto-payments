@@ -82,7 +82,6 @@ pub struct DepositSession {
     pub eip7702_auth: serde_json::Value,
     pub dest_address: String,
     pub dest_chain_id: i32,
-    pub dest_cctp_domain: i32,
     pub status: SessionStatus,
     pub source_chain_id: Option<i32>,
     pub detected_token: Option<String>,

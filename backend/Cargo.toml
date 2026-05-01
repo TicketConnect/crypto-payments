@@ -37,6 +37,9 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 eyre = "0.6"
 hex = "0.4"
 dotenvy = "0.15"
+lazy_static = "1.5.0"
+tower_governor = { version = "0.8.0", features = ["axum"] }
+tower = "0.5.3"
 
 [dev-dependencies]
 alloy = { version = "1", features = ["full", "node-bindings"] }

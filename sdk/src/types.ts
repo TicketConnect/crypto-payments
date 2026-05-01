@@ -4,6 +4,10 @@ export type SessionStatus =
   | 'pending'
   | 'detected'
   | 'sweeping'
+  // Cross-chain only: source-chain bridge tx confirmed; waiting for Across to
+  // deliver USDC on the destination chain. Transitions to 'swept' on delivery
+  // or 'failed' if the bridge times out / reports FAILED.
+  | 'bridging'
   | 'swept'
   | 'failed'
   | 'expired'

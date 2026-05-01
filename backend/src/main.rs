@@ -1,3 +1,4 @@
+mod auth;
 mod chains;
 mod config;
 mod db;
